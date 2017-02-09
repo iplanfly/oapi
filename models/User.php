@@ -98,7 +98,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function useInvitationCode($invitationCode)
     {
-        InvitationCode::findOne(['invitation_code' => $invitationCode])->use($this->id);
+        InvitationCode::findOne(['invitation_code' => $invitationCode])->useCode($this->id);
     }
 
     /**

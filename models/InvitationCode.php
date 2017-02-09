@@ -66,7 +66,7 @@ class InvitationCode extends \yii\db\ActiveRecord
      * @param $user_id 使用者ID
      * @throws yii\web\ServerErrorHttpException;
      */
-    public function use($user_id)
+    public function useCode($user_id)
     {
         $this->status = self::STATUS_USED;
         $this->used_by = $user_id;
