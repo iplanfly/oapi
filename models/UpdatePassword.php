@@ -48,7 +48,9 @@ class UpdatePassword extends \yii\base\Model
 
 	/**
 	 * 修改密码
+     *
 	 * @throws ForbiddenHttpException
+     * @return true|false
 	 */
 	public function updatePassword()
 	{

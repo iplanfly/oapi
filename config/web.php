@@ -12,9 +12,9 @@ $config = [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'xC-MbD22NV2NfLD7Zy_YjQW8BcY9tog_',
         ],
-        'response' => [
+/*        'response' => [
             'format' => 'json', 
-        ],
+        ],*/
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
