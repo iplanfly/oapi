@@ -21,6 +21,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class Question extends ActiveRecord
 {
+    const TYPE_ALL = 100;
     const TYPE_PHP = 1;
     const TYPE_IOS = 2;
     const TYPE_ANDROID = 3;
@@ -61,7 +62,7 @@ class Question extends ActiveRecord
             ['title', 'string', 'max' => 100],
             ['image', 'string', 'max' => 255],
             [['qq_group'], 'string', 'max' => 15],
-            ['type', 'in', 'range' => [self::TYPE_PHP, self::TYPE_IOS, self::TYPE_ANDROID]],
+            ['type', 'in', 'range' => [self::TYPE_ALL, self::TYPE_PHP, self::TYPE_IOS, self::TYPE_ANDROID]],
         ];
     }
 
@@ -89,6 +90,7 @@ class Question extends ActiveRecord
     public function getType()
     {
         $types = [
+            self::TYPE_ALL => '全部',
             self::TYPE_PHP => 'PHP',
             self::TYPE_IOS => 'iOS',
             self::TYPE_ANDROID => 'Android',

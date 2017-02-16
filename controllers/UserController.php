@@ -161,14 +161,24 @@ class UserController extends \yii\rest\Controller
 	 */
 	public function actionMyCollectedQuestions()
 	{
-		$question_ids = QuestionCollection::getQuestionId(Yii::$app->user->id);
+		$question_id = QuestionCollection::getQuestionId(Yii::$app->user->id);
 
 		$queryParams = Yii::$app->request->queryParams;
-		$queryParams['QuestionCollectedSearch']['id'] = $question_ids;
+		$queryParams['QuestionCollectedSearch']['id'] = $question_id;
 
         $searchModel = new QuestionCollectedSearch();
         $indexList = $searchModel->getList($queryParams);
 
         return $indexList;
+	}
+
+	/**
+	 * 取消一个自己曾经收藏的问题
+	 */
+	public function actionCancelMyCollectedQuestions()
+	{
+		QuestionCollection::deleteCollectedQuestion(Yii::$app->request->post('questionId'));
+
+		return true;
 	}
 }

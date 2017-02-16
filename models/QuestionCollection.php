@@ -5,6 +5,7 @@ namespace app\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\web\ForbiddenHttpException;
 
 /**
  * This is the model class for table "{{%question_collection}}".
@@ -77,5 +78,36 @@ class QuestionCollection extends ActiveRecord
             ->where(['user_id' => $user_id])
             ->asArray()
             ->column();
+    }
+
+    /**
+     * 删除收藏的问题
+     *
+     * @param array $questionId 问题ID
+     * @throws yii\web\ForbiddenHttpException;
+     */
+    public static function deleteCollectedQuestion(array $questionId)
+    {
+        foreach ($questionId as $id) {
+            static::getModel($id)->delete();
+        }
+    }
+
+    /**
+     * 获取指定用户的指定问题的模型
+     *
+     * @param $questionId 问题ID
+     * @return model
+     * @throws yii\web\ForbiddenHttpException if the model is null
+     */
+    public static function getModel($questionId)
+    {
+        $model = static::findOne(['user_id' => Yii::$app->user->id, 'question_id' => $questionId]);
+
+        if ($model === null) {
+            throw new ForbiddenHttpException('并没有收藏这个问题');
+        }
+
+        return $model;
     }
 }
