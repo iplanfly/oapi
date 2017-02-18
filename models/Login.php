@@ -24,6 +24,7 @@ class Login extends Model
         return [
             // username and password are both required
             [['mobilePhone', 'password'], 'required'],
+            ['mobilePhone', 'number', 'numberPattern' => '/^1\d{10}$/', 'message' => '手机号格式不正确！'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
         ];

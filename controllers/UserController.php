@@ -92,16 +92,11 @@ class UserController extends \yii\rest\Controller
 	/**
 	 * 获取个人信息
 	 * 
-	 * @throws yii\web\ForbiddenHttpException
 	 * @return array
 	 */
 	public function actionInfo()
 	{
-		$infoModel = UserInfo::findOne(['user_id' => Yii::$app->user->id]);
-		if ($infoModel === null) {
-			throw new ForbiddenHttpException('暂无个人信息哦。');
-		} 
-		return $infoModel;
+		return UserInfo::getUserInfo();
 	} 
 
 	/**
@@ -115,6 +110,7 @@ class UserController extends \yii\rest\Controller
 		$model = UserInfo::getModel();
 
 		$model->attributes = Yii::$app->request->post();
+		$model->qq_group = Yii::$app->request->post('qqGroup');
 		$model->user_id = Yii::$app->user->id;
 
 		$transaction = Yii::$app->db->beginTransaction();

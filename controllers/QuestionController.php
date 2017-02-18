@@ -33,7 +33,7 @@ class QuestionController extends \yii\rest\Controller
             'actions' => [
                 'create' => ['post'],
                 'index' => ['get'],
-                'collection' => ['post'],
+                'collect' => ['post'],
             ],
 	    ];
 	    return $behaviors;
@@ -64,6 +64,7 @@ class QuestionController extends \yii\rest\Controller
 
 		$model->attributes = Yii::$app->request->post();
 		$model->user_id = Yii::$app->user->id;
+		$model->qq_group = Yii::$app->request->post('qqGroup');
 
 		$transaction = Yii::$app->db->beginTransaction();
 
@@ -90,16 +91,21 @@ class QuestionController extends \yii\rest\Controller
 	 * @throws yii\web\ForbiddenHttpException
 	 * @return true
 	 */
-	public function actionCollection()
+	public function actionCollect()
 	{
 		$model = new QuestionCollection;
 
-		$model->question_id = Yii::$app->request->post('questionId');
-		$model->user_id = Yii::$app->user->id;
+		foreach (Yii::$app->request->post('questionId') as $questionId) {
 
-		if (!$model->save()) {
-            $errors = $model->getFirstErrors();
-            throw new ForbiddenHttpException(reset($errors));
+			$_model = clone $model;
+
+			$_model->question_id = $questionId;
+			$_model->user_id = Yii::$app->user->id;
+
+			if (!$_model->save()) {
+	            $errors = $_model->getFirstErrors();
+	            throw new ForbiddenHttpException(reset($errors));
+			}
 		}
 
 		return true;

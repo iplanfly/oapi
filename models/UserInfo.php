@@ -34,7 +34,8 @@ class UserInfo extends \yii\db\ActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['nickname', 'face'], 'string', 'max' => 100],
+            ['nickname', 'string', 'max' => 30],
+            ['face', 'string', 'max' => 100],
             [['qq', 'qq_group'], 'string', 'max' => 15],
             [['wechat', 'intro'], 'string', 'max' => 60],
             [['nickname'], 'unique', 'message' => '昵称已被占用！'],
@@ -72,5 +73,25 @@ class UserInfo extends \yii\db\ActiveRecord
         }
 
         return $model;
+    }
+
+    /**
+     * 获取用户信息
+     *
+     * @return array
+     * @throws yii\web\ForbiddenHttpException
+     */
+    public static function getUserInfo()
+    {
+        $info = UserInfo::find()
+            ->select(['nickname', 'face', 'qq', 'wechat', 'qqGroup' => 'qq_group', 'intro'])
+            ->where(['user_id' => Yii::$app->user->id])
+            ->asArray()
+            ->one();
+        if (empty($info)) {
+            throw new ForbiddenHttpException('暂无个人信息哦。');
+        }
+
+        return $info;
     }
 }
