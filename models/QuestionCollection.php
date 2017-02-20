@@ -110,4 +110,17 @@ class QuestionCollection extends ActiveRecord
 
         return $model;
     }
+
+    /**
+     * 判断一个用户的一个问题是否已收藏
+     *
+     * @param integer $userId 用户ID
+     * @param integer $questionId 问题ID
+     */
+    public static function isCollected($userId, $questionId)
+    {
+        return static::find()
+            ->where(['user_id' => $userId, 'question_id' => $questionId])
+            ->exists();
+    }
 }

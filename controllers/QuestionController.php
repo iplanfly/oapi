@@ -10,6 +10,7 @@ use yii\web\ForbiddenHttpException;
 use app\models\Upload;
 use app\models\QuestionSearch;
 use app\models\QuestionCollection;
+use app\models\User;
 
 /**
  * question 控制器
@@ -48,6 +49,14 @@ class QuestionController extends \yii\rest\Controller
 	{
         $searchModel = new QuestionSearch();
         $indexList = $searchModel->getList(Yii::$app->request->queryParams);
+
+        if (!empty(($accessToken = Yii::$app->request->get('access-token')))) {
+			Yii::$app->user->loginByAccessToken($accessToken);
+        }
+
+        if (!Yii::$app->user->isGuest) {
+			$indexList = QuestionSearch::attachCollectionStatus($indexList);
+        }
 
         return $indexList;
 	}

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Question;
+use app\models\QuestionCollection;
 
 /**
  * QuestionSearch represents the model behind the search form about `app\models\Question`.
@@ -42,7 +43,7 @@ class QuestionSearch extends Question
     public function search($params)
     {
         $query = Question::find()
-            ->select(['type', 'title', 'content', 'image', 'qq_group', 'created_at']);
+            ->select(['id', 'type', 'title', 'content', 'image', 'qq_group', 'created_at']);
 
         // add conditions that should always apply here
 
@@ -99,6 +100,7 @@ class QuestionSearch extends Question
 
         foreach ($dataProvider->getModels() as $model) {
             $result[] = [
+                'id' => $model->id,
                 'type' => $model->getType(),
                 'title' => $model->title,
                 'content' => $model->content,
@@ -109,5 +111,20 @@ class QuestionSearch extends Question
         }
 
         return $result;
+    }
+
+    /**
+     * 当用户登录时，为返回的问题列表附加收藏状态
+     *
+     * @param $indexList 收藏列表
+     * @return array 附加状态后的列表
+     */
+    public static function attachCollectionStatus($indexList)
+    {
+        $userId = Yii::$app->user->id;
+        foreach ($indexList as &$question) {
+            $question['isCollected'] = QuestionCollection::isCollected($userId, $question['id']) ? true : false;
+        }
+        return $indexList;
     }
 }
