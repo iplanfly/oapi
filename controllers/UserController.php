@@ -97,7 +97,7 @@ class UserController extends \yii\rest\Controller
 	public function actionInfo()
 	{
 		return UserInfo::getUserInfo();
-	} 
+	}
 
 	/**
 	 * 编辑个人信息

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "{{%user_info}}".
@@ -79,7 +80,7 @@ class UserInfo extends \yii\db\ActiveRecord
      * 获取用户信息
      *
      * @return array
-     * @throws yii\web\ForbiddenHttpException
+     * @throws yii\web\NotFoundHttpException
      */
     public static function getUserInfo()
     {
@@ -89,7 +90,7 @@ class UserInfo extends \yii\db\ActiveRecord
             ->asArray()
             ->one();
         if (empty($info)) {
-            throw new ForbiddenHttpException('暂无个人信息哦。');
+            throw new NotFoundHttpException('暂无个人信息哦。');
         }
 
         return $info;
